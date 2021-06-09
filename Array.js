@@ -1,6 +1,6 @@
-const MemoryClass = require('./memory')
+const Memory = require('./memory')
 
-const memory = new MemoryClass;
+const memory = new Memory;
 
 class Array {
     constructor() {
@@ -18,10 +18,10 @@ class Array {
 
     push(value) {
         // Make space for the new item
-        // if (this.length >= this._capacity) {
+        if (this.length >= this._capacity) {
             this._resize((this.length + 1) * Array.SIZE_RATIO);
             // Because the memory is stored in contiguous order, you simply add the length to the initial pointer to find the array index that you want.
-        // }
+        }
         
         memory.set(this.ptr + this.length, value);
         this.length++;
@@ -59,7 +59,7 @@ class Array {
         this.length--;
     }
 
-    resize(size) { // O(n) linear time
+    _resize(size) { // O(n) linear time
         const oldPtr = this.ptr;
         this.ptr = memory.allocate(size);
         if (this.ptr === null) {
@@ -71,6 +71,6 @@ class Array {
     }
 
 }
-Array.SIZE_RATIO = 3;
+// Array.SIZE_RATIO = 3;
 
 module.exports = Array

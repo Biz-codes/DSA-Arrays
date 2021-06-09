@@ -26,8 +26,8 @@ Using the Array class you just created above, add an item to the array. Use the 
 
 What is the length, capacity and memory address of your array?
 
-    1, 3, and 0
-
+    Array { length: 1, _capacity: 3, ptr: 0 }
+    
 Add the following in the main function and then print the array:
 
     ...
@@ -39,9 +39,9 @@ Add the following in the main function and then print the array:
 
 What is the length, capacity and memory address of your array? Explain the result of your program after adding the new lines of code.
 
-    6, 18, 45
+    Array { length: 6, _capacity: 12, ptr: 3 }
 
-We've pushed 6 items onto the array, and it has grown by 3 every time because of the SIZE_RATIO property. Our pointer is now at the 45th place in memory because the previous memory blocks have been taken up by our arrays of sizes 3, 6, 9, 12, 15, and 18. We should probably be clearing those unused blocks of memory.
+The length is 6, beacues we've pushed 6 items into the array. When we push the 3rd item (15), it triggers the if statement: `if (this.length >= this._capacity) {this._resize((this.length + 1) * Array.SIZE_RATIO)} Since the current length is 3, our computation is (3 + 1) * 3 (our size ratio). This works out to a capacity of 12, which is not exceeded. Them memory address is 3, because it started out at 1. The this._resize changed the memory address to 2, and the * Array.SIZE_RATIO changed it to 3.
 
 ## 3. Exploring the pop() method
 
@@ -54,17 +54,20 @@ Add the following in the main function and then print the array:
 
 What is the length, capacity, and address of your array? Explain the result of your program after adding the new lines of code.
 
-    3, 18, 45
+    Array { length: 3, _capacity: 12, ptr: 3 }
 
-    Length decreases, but the capacy and the memory address have already been shifted by pushing.
+The length decreases when we pop off the last 3 values, but the capacity and the memory address have already been shifted by pushing, so they stay as they are.
 
 ## 4. Understanding more about how arrays work
 
 Print the 1st item in the array arr.
+    3
 
 Empty the array and add just 1 item: arr.push("tauhida");
 
 Print this 1 item that you just added. What is the result? Can you explain your result?
+
+    Array { length: 0, _capacity: 12, ptr: 3 }
 
     NaN
 
@@ -80,6 +83,8 @@ ______________________________
 
 You can use JavaScript's built-in arrays to solve the following drills. After you write the algorithm, identify its time complexity and determine if it needs to be optimized. Start each problem by understanding the problem and coming up with some sample input and output. For your convenience, a few sample input and output are provided.
 
+For the code for drills 5-12, see drills_5-12.js
+
 ## 5. URLify a string
 
 A common mistake users make when they type in an URL is to put spaces between words or letters. A solution that developers can use to solve this problem is to replace any spaces with a %20. Write a method that takes in a string and replaces all its empty spaces with a %20. Your algorithm can only make 1 pass through the string. Examples of input and output for this problem can be
@@ -92,30 +97,14 @@ Input: www.thinkful.com /tauh ida parv een
 
 Output: www.thinkful.com%20/tauh%20ida%20parv%20een
 
-    const URLify = string => {
-        const arr = string.split('')
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i] === ' ') {
-                arr[i] = '%20'
-            }
-        }
-        return arr.join('')
-    }
+   
 
 O(n)
 
 ## 6. Filtering an array
 Imagine you have an array of numbers. Write an algorithm to remove all numbers less than 5 from the array. DO NOT use Array's built-in .filter() method here; write the algorithm from scratch.
 
-    function filterLessThanFive(arr) { // O(n)
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i] < 5) {
-                arr.splice(i, 1)
-            }
-        }
 
-        return arr;
-    }
 
 O(n) This one might be able to be improved since there is a logical way to divide the data (less than five) but I'm not sure.
 
@@ -123,21 +112,9 @@ O(n) This one might be able to be improved since there is a logical way to divid
 
 You are given an array containing positive and negative integers. Write an algorithm which will find the largest sum in a continuous sequence.
 
-Input: [4, 6, -3, 5, -2, 1] Output: 12
+    Input: [4, 6, -3, 5, -2, 1] Output: 12
 
-    function maxSum(array) {
-        let currentSum = 0;
-        let currentHighest = array[0] // We'll initialize this with array[0] instead of 0 in case we have an array with all negative numbers
-
-        array.forEach(number => {
-            currentSum += number;
-            if (currentSum > currentHighest) {
-                currentHighest = currentSum;
-            }
-        })
-
-        return currentHighest;
-    }
+   
 O(n) This function's complexity doesn't appear improveable
 
 ## 8. Merge arrays
@@ -145,27 +122,6 @@ Imagine you have 2 arrays which have already been sorted. Write an algorithm to 
 
 Input:[1, 3, 6, 8, 11] and [2, 3, 5, 8, 9, 10] Output:[1, 2, 3, 3, 5, 6, 8, 8, 9, 10, 11]
 
-    function mergeSortedArrays(array1, array2) {
-        const totalLength = array1.length + array2.length;
-        const result = [];
-
-        // We're going to track which index we're looking at in each array
-        let index1 = 0;
-        let index2 = 0;
-
-        while (result.length < totalLength) {
-            if (array1[index1] < array2[index2]
-                || array2[index2] === undefined) { // Because eventually one of the arrays is going to reach its end. If arr2 reaches its end and becomes undefined, the if condition will fire until all remaining elements are in our result array. If the first array reaches its end, the function will proceed to else by default until the second array reaches its end.
-                result.push(array1[index1]);
-                index1++;
-            } else {
-                result.push(array2[index2]);
-                index2++;
-            }
-        }
-
-        return result;
-    }
 
 O(n) where n is the combined amount of numbers. We iterate over both arrays at the same time and keep track of where we are in each with an index variable. Much better performance than if we were to have used a nested loop.
 
@@ -174,47 +130,13 @@ Write an algorithm that deletes given characters from a string. For example, giv
 
 Input:'Battle of the Vowels: Hawaii vs. Grozny', 'aeiou' Output: 'Bttl f th Vwls: Hw vs. Grzny'
 
-    function removeChars(string, chars) {
-        const string = string.split('');
-        const chars = chars.split('');
-        const result = [];
 
-        for (let el of string) {
-            if (!chars.includes(el)) {
-                result.push(el);
-            }
-        }
-
-        return result.join('');
-    }
-
-    removeChars('Battle of the Vowels: Hawaii vs. Grozny', 'aeiou');
-    // Bttl f th Vwls: Hw vs. Grzny
-
-O(n * k), number of chars in the sentance times the number of chars to remove
+O(n * k), number of chars in the sentence times the number of chars to remove
 
 ## 10. Products
 Given an array of numbers, write an algorithm to find out the products of every other number except the number at each index.
 
-Input:[1, 3, 9, 4] Output:[108, 36, 12, 27]
-
-    function products(array) {
-        let result = [];
-
-        // We need to generate a product for each element in the array
-        array.forEach(number => {
-            let product = 1;
-            // The product is the result of multiplying every element in the array except the one we are looking right now
-            for (let el of array) {
-                if (el !== number) {
-                    product *= el;
-                }
-            }
-            result.push(product)
-        })
-
-        return result;
-    }
+    Input:[1, 3, 9, 4] Output:[108, 36, 12, 27]
 
 O(n2) It might be possibly to improve upon this complexity
 
@@ -235,42 +157,7 @@ Write an algorithm which searches through a 2D array, and whenever it finds a 0 
     [0,0,0,0,0],
     [0,0,1,1,0]];
     
-    // We'll have to iterate over element in the array to check for 0
-    // If we hit a 0, we'll have to iterate height+width times
-
-    function detonateZeroes(array) {
-        let zeroes = []
-
-        for (let i = 0; i < array.length; i++) {
-            for (let j = 0; j < array[i].length; j++) {
-                if (array[i][j] === 0) {
-                    zeroes.push([i, j])
-                }
-            }
-        }
-
-        zeroes.forEach(zero => {
-            let row = zero[0];
-            let column = zero[1];
-
-            for (let i = 0; i < array.length; i++) {
-                for (let j = 0; j < array[i].length; j++) {
-                    if (i === row || j === column) {
-                        array[i][j] = 0;
-                    }
-                }
-            }
-        })
-
-        return array;
-    }
-    detonateZeroes(
-        [[1,0,1,1,0],
-        [0,1,1,1,0],
-        [1,1,1,1,1],
-        [1,0,1,1,1],
-        [1,1,1,1,1]]
-    );
+    
     // O(2n^2)
 
 ## 12. String rotation
@@ -283,24 +170,5 @@ Output: False
 Input: amazon, azonam
 
 Output: true
-
-    function isRotation(string1, string2) {
-        let arr = string1.split('');
-        for (let i = 0; i < arr.length; i++) {
-            let temp = arr.shift();
-            arr.push(temp);
-            let rotation = arr.join('')
-    
-            if (rotation === string2) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    isRotation('amazon', 'azonma')
-    // false
-    isRotation('amazon', 'azonam')
-    // true
 
 O(n), we iterate once for every char in the string

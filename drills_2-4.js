@@ -19,24 +19,34 @@ const Array = require('./Array');
 // What is the purpose of the _resize() function in your Array class?
 // This ensures that we don't run out of memory and allocates enough memory to handle the array. When the new array size is larger than the current capacity, we copy the array to a new memory address and expand the size of the array by the constant SIZE_RATIO + 1 to create a buffer
 
-function main() {
+function main(){
     Array.SIZE_RATIO = 3;
-    //   instantiate the array class
-    let arr = new Array();
+
+    // Create an instance of the Array class
+    let arr = new Array(3, 5, 15, 19, 45, 10);
+
+    // Add an item to the array
     arr.push(3);
-    // arr.push(5);
-    // arr.push(19);
-  
-    // Print the 1st item in the array arr
+    arr.push(5);
+    arr.push(15);
+    arr.push(19);
+    arr.push(45);
+    arr.push(10);
+
+    arr.pop();
+    arr.pop();
+    arr.pop();
+
+    console.log(arr);
     console.log(arr.get(0));
     for (let i = arr.length - 1; i >= 0; i--) {
-      arr.remove(i);
-    }
-    console.log(arr);
-    arr.push("tauhida");
-    console.log(arr.get(0));
-  }
-  
-  main();
+        arr.remove(i);
+      }
+      console.log(arr);
+      arr.push("tauhida");
+      console.log(arr.get(0));
+}
+
+main();
   
   
