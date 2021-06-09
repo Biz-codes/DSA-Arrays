@@ -1,12 +1,18 @@
 // 5 URL-ify a string
 // write a method that takes in a string and rpelaces all empty spaces with '%20'
 
-const stringURLify = (string) => {
-    let outString = string.split(" ").join("%20");
-    return outString;
-  };
-//   console.log(stringURLify("tauhida parveen"));
-//   console.log(stringURLify("www.thinkful.com /tauh ida parv een"));
+const URLify = string => {
+    const arr = string.split('')
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === ' ') {
+        arr[i] = '%20'
+      }
+    }
+    return arr.join('')
+  }
+// console.log(URLify("tauhida parveen"))
+// console.log(URLify("www.thinkful.com /tauh ida parv een"));
+// console.log(URLify("llsdkhfuiah fhuilst irhtijpeoiru hkgj jhguk yfguk kyfy dcfjhyt ytjdfyut ytrdutre trdeuyjtryui treurt5rw yu5et tre dc d d g gh d d g gd d d gf gg df d d d f gg f d d d fg f d edd  f f f f f f f f f d d d d d d d d d d d  d d d d d idtu istdu oirtudj irsdugj odriug oiug o8tru orihsg iryt osighf oieryt oseirtyhg jkdghg ugklh iugh uitihui uyfgh uyghkj uyrt yut uyg t tg y y y fytjdyt  yut yut y tyt yt yut yt yt yt yt yt yt rytu yt rftrdt iugl")); //0.044 s
   
   // 6 Filter an array
   //Imagine you have an array of numbers. Write an algorithm to remove all numbers less than 5 from the array. DO NOT use Array's built-in .filter() method here; write the algorithm from scratch.
@@ -89,6 +95,7 @@ const stringURLify = (string) => {
       }
       return false;
     };
+    
     for (let i = 0; i < string.length; i++) {
       if (!isCharNull(string[i])) {
         outString += string[i];
@@ -184,7 +191,7 @@ const stringURLify = (string) => {
     return false;
 }
 
-console.log(isRotation('amazon', 'azonma'))
-// false
-console.log(isRotation('amazon', 'azonam'))
-// true
+// console.log(isRotation('amazon', 'azonma'))
+// // false
+// console.log(isRotation('amazon', 'azonam'))
+// // true
